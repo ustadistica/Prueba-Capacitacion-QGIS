@@ -1,307 +1,238 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial: Análisis Geoespacial con Python y QGIS</title>
-    <!-- Incluir D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        /* --- Paleta de Colores (Azules, Naranjas, Amarillos) --- */
-        :root {
-            --primary-blue: #0077b6;
-            --secondary-blue: #023e8a;
-            --accent-orange: #fb8500;
-            --accent-yellow: #ffb703;
-            --dark-text: #023047;
-            --light-bg: #edf6f9;
-            --white: #ffffff;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Análisis Geoespacial con Python y QGIS</title>
+  <!-- Tipografías -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    /* --- Paleta USTA --- */
+    :root {
+      --usta-blue: #002f6c;
+      --usta-yellow: #ffcc00;
+      --usta-red: #c8102e;
+      --usta-dark: #1a1a1a;
+      --usta-light: #f9f9f9;
+      --white: #ffffff;
+    }
 
-        /* --- Estilos Generales --- */
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--light-bg);
-            color: var(--dark-text);
-            margin: 0;
-            line-height: 1.7;
-        }
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background-color: var(--usta-light);
+      color: var(--usta-dark);
+      margin: 0;
+      line-height: 1.7;
+    }
 
-        /* --- Contenedor Principal --- */
-        .container {
-            max-width: 950px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
 
-        /* --- Encabezado Dinámico con D3.js --- */
-        .hero-header {
-            position: relative;
-            text-align: center;
-            padding: 5rem 2rem;
-            border-radius: 16px;
-            overflow: hidden;
-            background-color: var(--secondary-blue);
-            color: var(--white);
-            margin-bottom: 3rem;
-        }
-        
-        .hero-header h1 {
-            font-size: 3rem;
-            margin: 0;
-            position: relative;
-            z-index: 2;
-        }
+    /* --- Encabezado --- */
+    .hero-header {
+      position: relative;
+      text-align: center;
+      padding: 5rem 2rem;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--usta-blue), var(--usta-red));
+      color: var(--white);
+      margin-bottom: 3rem;
+    }
 
-        .hero-header .subtitle {
-            font-size: 1.3rem;
-            margin-top: 0.5rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 2;
-        }
+    .hero-header h1 {
+      font-family: 'Merriweather', serif;
+      font-size: 3rem;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+    }
 
-        #d3-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+    .hero-header .subtitle {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      position: relative;
+      z-index: 2;
+    }
 
-        /* --- Sección ¿Qué es QGIS? --- */
-        .qgis-intro {
-            background-color: var(--white);
-            padding: 2.5rem;
-            border-radius: 16px;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
-        }
+    #d3-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
 
-        .qgis-intro h2 {
-            font-size: 2.2rem;
-            color: var(--accent-orange);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    /* --- Sección Intro --- */
+    .qgis-intro {
+      background-color: var(--white);
+      padding: 2.5rem;
+      border-radius: 16px;
+      margin-bottom: 3rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    }
 
-        .intro-columns {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        
-        .intro-text p {
-            font-size: 1.1rem;
-        }
+    .qgis-intro h2 {
+      font-size: 2.2rem;
+      font-family: 'Merriweather', serif;
+      color: var(--usta-blue);
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 3px solid var(--usta-yellow);
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
 
-        .intro-image {
-            flex-shrink: 0;
-        }
-        
-        .intro-image img {
-            max-width: 200px;
-            
-        }
+    .intro-columns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+    }
 
-        /* --- Tarjetas del Tutorial --- */
-        .tutorial-card {
-            background-color: var(--white);
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
-            margin-bottom: 2.5rem;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 5px solid var(--accent-yellow);
-        }
+    .intro-text p {
+      font-size: 1.1rem;
+    }
 
-        .tutorial-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-        }
+    /* --- Tarjetas --- */
+    .tutorial-card {
+      background-color: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 6px solid var(--usta-yellow);
+    }
 
-        .card-content {
-            padding: 2.5rem;
-        }
+    .tutorial-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
 
-        .card-content h3 {
-            font-size: 1.9rem;
-            color: var(--primary-blue);
-            margin-top: 0;
-            margin-bottom: 1rem;
-        }
+    .card-content {
+      padding: 2.5rem;
+    }
 
-        /* --- Lista de Temas --- */
-        .topics-list {
-            list-style: none;
-            padding: 0;
-            margin: 1.5rem 0;
-        }
+    .card-content h3 {
+      font-size: 1.8rem;
+      color: var(--usta-blue);
+      font-family: 'Merriweather', serif;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
 
-        .topics-list li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .topics-list .icon {
-            color: var(--accent-orange);
-            margin-right: 1rem;
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
-        }
+    /* --- Lista --- */
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
 
-        /* --- Botón de Acción --- */
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, var(--accent-orange), var(--accent-yellow));
-            color: var(--dark-text);
-            padding: 14px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(251, 133, 0, 0.4);
-        }
-        
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(251, 133, 0, 0.5);
-        }
+    .topics-list li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
 
-        /* --- Pie de Página --- */
-        .footer {
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
+    .topics-list .icon {
+      color: var(--usta-red);
+      margin-right: 1rem;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
 
-        .footer a {
-            color: var(--primary-blue);
-            font-weight: bold;
-        }
-    </style>
+    /* --- Botón --- */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--usta-yellow);
+      color: var(--usta-dark);
+      padding: 14px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .cta-button:hover {
+      transform: scale(1.05);
+      background: var(--usta-red);
+      color: var(--white);
+    }
+
+    /* --- Pie de Página --- */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .footer a {
+      color: var(--usta-blue);
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
+    <!-- Encabezado -->
+    <header class="hero-header">
+      <svg id="d3-canvas"></svg>
+      <h1>Capacitación en QGIS y Python</h1>
+      <p class="subtitle">Universidad Santo Tomás – Facultad de Estadística</p>
+    </header>
 
-        <!-- Encabezado con Animación D3.js -->
-        <header class="hero-header">
-            <svg id="d3-canvas"></svg>
-            <h1>¡Bienvenido al Mundo Geoespacial!</h1>
-            <p class="subtitle">Descubre el poder de los mapas y los datos con Python y QGIS.</p>
-        </header>
-
-        <main>
-            <!-- Sección Introductoria sobre QGIS -->
-            <section class="qgis-intro">
-                <h2>¿Qué es QGIS?</h2>
-                <div class="intro-columns">
-                    <div class="intro-image">
-                        <!-- Icono de QGIS simplificado -->
-                        
-                    </div>
-                    <div class="intro-text">
-                        <p>
-                            Imagina un "Photoshop" o un "Excel" pero para mapas. ¡Eso es QGIS! Es un <strong>Sistema de Información Geográfica (SIG)</strong> profesional, gratuito y de código abierto.
-                        </p>
-                        <p>
-                            Te permite <strong>visualizar, gestionar, editar y analizar datos geográficos</strong> para crear mapas increíbles. Al combinarlo con Python, ¡puedes automatizar tareas y realizar análisis complejos que serían imposibles a mano!
-                        </p>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Tarjeta 1: Introducción a GeoPandas -->
-            <section class="tutorial-card">
-                <div class="card-content">
-                    <h3>1. Fundamentos de GeoPandas</h3>
-                    <p>
-                        Este cuaderno es tu puerta de entrada. Aprenderás a manipular datos geográficos en Python con GeoPandas, la librería esencial que combina el poder de Pandas con la capacidad de entender formas y ubicaciones.
-                    </p>
-                    <ul class="topics-list">
-                        <li><svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg> <strong>Carga de Datos Vectoriales:</strong> Lee archivos `.shp` y explora sus geometrías.</li>
-                        <li><svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg> <strong>Visualización de Mapas:</strong> Crea tus primeros mapas estáticos de forma sencilla.</li>
-                        <li><svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582" /></svg> <strong>Sistemas de Coordenadas (CRS):</strong> Entiende por qué son cruciales para la precisión de tus mapas.</li>
-                    </ul>
-                    <a href="https://colab.research.google.com/github/ustadistica/tutorial-de-como-usar-qgis-con-python-/blob/main/Docs/QGIS_En_Python.ipynb" target="_blank" class="cta-button">Iniciar Cuaderno en Colab</a>
-                </div>
-            </section>
-
-            <!-- Tarjeta 2: Geocodificación -->
-            <section class="tutorial-card">
-                <div class="card-content">
-                    <h3>2. Geocodificación de Direcciones</h3>
-                    <p>
-                       En este caso práctico, transformarás direcciones de texto (como "Calle 13 # 4-20") en puntos sobre un mapa. Una habilidad clave para logística, análisis de mercado o cualquier proyecto que necesite ubicar lugares.
-                    </p>
-                    <ul class="topics-list">
-                        <li><svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg> <strong>APIs de Geocodificación:</strong> Usa `geopy` para conectar con servicios que convierten texto a coordenadas.</li>
-                        <li><svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg> <strong>Limpieza y Estandarización:</strong> Prepara tus datos de direcciones para obtener los mejores resultados.</li>
-                        <li><svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503-12.495l-9 16.5m12-16.5l-9 16.5" /></svg> <strong>Mapas Interactivos:</strong> Visualiza tus resultados en un mapa dinámico con `Folium` donde podrás hacer zoom y explorar.</li>
-                    </ul>
-                    <a href="https://colab.research.google.com/github/ustadistica/tutorial-de-como-usar-qgis-con-python-/blob/main/Docs/Geocodificacion_Ejemplo_Python.ipynb" target="_blank" class="cta-button">Iniciar Cuaderno en Colab</a>
-                </div>
-            </section>
-        </main>
-
-        <!-- Pie de página -->
-        <footer class="footer">
+    <main>
+      <!-- Intro -->
+      <section class="qgis-intro">
+        <h2>¿Qué es QGIS?</h2>
+        <div class="intro-columns">
+          <div class="intro-text">
             <p>
-                Desarrollado para la comunidad de la Universidad Santo Tomás.
-                <br>
-                Encuentra el código fuente en <a href="https://github.com/ustadistica/tutorial-de-como-usar-qgis-con-python-" target="_blank">GitHub</a>.
+              QGIS es un <strong>Sistema de Información Geográfica (SIG)</strong> profesional, libre y de código abierto.
+              Permite <strong>visualizar, gestionar, editar y analizar datos geográficos</strong> para proyectos de cartografía, análisis territorial y gestión espacial.
             </p>
-        </footer>
+            <p>
+              Al combinarlo con <strong>Python</strong>, es posible automatizar procesos y realizar análisis avanzados que potencian tus investigaciones y proyectos académicos.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    </div>
+      <!-- Tarjeta ejemplo -->
+      <section class="tutorial-card">
+        <div class="card-content">
+          <h3>1. Fundamentos de GeoPandas</h3>
+          <p>
+            Aprende a manipular datos geográficos en Python con GeoPandas, una librería que une Pandas y geometrías espaciales.
+          </p>
+          <ul class="topics-list">
+            <li>📂 <strong>Carga de datos vectoriales</strong></li>
+            <li>🗺️ <strong>Visualización de mapas</strong></li>
+            <li>🌍 <strong>Sistemas de coordenadas (CRS)</strong></li>
+          </ul>
+          <a href="#" class="cta-button">Abrir cuaderno en Colab</a>
+        </div>
+      </section>
+    </main>
 
-    <script>
-        // --- Animación de fondo con D3.js ---
-        const svg = d3.select("#d3-canvas");
-        const width = window.innerWidth;
-        const height = 280; // Altura fija del header
-
-        const numCircles = 50;
-        const circles = d3.range(numCircles).map(() => ({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            r: Math.random() * 10 + 5, // Radios entre 5 y 15
-            color: d3.interpolateWarm(Math.random()) // Colores cálidos (naranja, amarillo)
-        }));
-
-        const nodes = svg.selectAll("circle")
-            .data(circles)
-            .enter()
-            .append("circle")
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
-            .attr("r", d => d.r)
-            .attr("fill", d => d.color)
-            .attr("opacity", 0.7);
-
-        function animate() {
-            nodes.transition()
-                .duration(2000)
-                .delay((d, i) => i * 20)
-                .attr("cx", d => (d.x + 50 + Math.random() * 50) % width)
-                .attr("cy", d => (d.y + 20 + Math.random() * 20) % height)
-                .transition()
-                .duration(2000)
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y)
-                .on("end", animate);
-        }
-
-        animate();
-    </script>
+    <footer class="footer">
+      <p>
+        Desarrollado para la comunidad de la Universidad Santo Tomás. <br>
+        Código disponible en <a href="#">GitHub</a>.
+      </p>
+    </footer>
+  </div>
 </body>
 </html>
