@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tutorial 1: Básico en QGIS</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+  <header>
+    <h1>Tutorial 1: Básico en QGIS</h1>
+    <p>Consultora de la Facultad de Estadística - Universidad Santo Tomás</p>
+  </header>
+
+  <nav>
+    <a href="../index.html">Inicio</a>
+    <a href="tutorials/Tutorial1.html">Empecemos con Qgis</a>
+    <a href="tutorials/Tutorial2.html">Ahora con Raster</a>
+  </nav>
+
+  <div class="container">
+
+    <!-- INTRODUCCIÓN -->
+    <h2>Principio</h2>
+    <p>
+      En este tutorial realizaremos una introducción básica a QGIS para aprender a manejar la aplicación. 
+      Comenzaremos cargando archivos con extensión <code>.shp</code>, que son los más comunes para trabajar con información geográfica, 
+      y configuraremos las coordenadas en el sistema de referencia de Bogotá (Colombia), ya que los datos que utilizaremos corresponden a esta ciudad.
+    </p>
+    <p>
+      En QGIS existen dos tipos principales de mapas: <strong>vectoriales</strong> y <strong>ráster</strong>. 
+      Sin embargo, en esta parte del ejercicio trabajaremos únicamente con los mapas vectoriales. 
+      Al finalizar, aprenderemos a exportar el mapa en formato PDF, listo para guardar o imprimir.
+    </p>
+    <p>
+      Para este ejercicio utilizaremos bases de datos disponibles en la plataforma 
+      <a href="https://mapas.bogota.gov.co/" target="_blank">Bogotá Mapas</a>, 
+      enlazadas con los datos abiertos de la ciudad y con el Laboratorio Urbano de Bogotá. 
+      Entre ellas se encuentran:
+    </p>
+    <ul>
+      <li>Consultorios clínicos de Bogotá (puntos).</li>
+      <li>Territorios de redes de salud por localidad (polígonos).</li>
+      <li>Polígonos de localidades (polígonos).</li>
+      <li>Polígonos de UPZ (polígonos).</li>
+    </ul>
+
+    <!-- PASO 1 -->
+    <h2>PASO 1: Configurar QGIS para Bogotá</h2>
+    <p>Lo primero que debemos hacer es asegurarnos de que el sistema de referencia de coordenadas (SRC) esté configurado correctamente para Bogotá.</p>
+    <ol>
+      <li>Abrir la aplicación QGIS desde el menú de inicio o el acceso directo.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image.png" alt="Abrir QGIS">
+    </p>
+    <ol start="2">
+      <li>Ir a <strong>Proyecto → Propiedades → SRC</strong>.</li>
+      <li>En la opción <strong>Filtrar</strong>, escribir <code>EPSG:3116 – MAGNA-SIRGAS / Colombia Bogotá zone</code>.</li>
+      <li>Seleccionar la opción, luego hacer clic en <strong>Aplicar</strong> y después en <strong>Aceptar</strong>.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy.png" alt="Configurar EPSG:3116">
+    </p>
+    <ol start="5">
+      <li>Guardar el proyecto como archivo <code>.qgz</code> para conservar la configuración.</li>
+    </ol>
+
+    <!-- PASO 2 -->
+    <h2>Paso 2: Descarga los mapas vectoriales</h2>
+    <p>Opción A: Descargar los datos desde Mapas Bogotá</p>
+    <ol>
+      <li>Ir al navegador web</li>
+      <li>Ir a la página: <a href="https://mapas.bogota.gov.co/#" target="_blank">Mapas Bogotá</a></li>
+      <li>En el portal de Mapas Bogotá, selecciona la opción Ver datos (puedes elegir por Temática o por Sector).</li>
+      <li>Haz clic en Más información en el conjunto de datos que quieras descargar; esto te llevará al portal de Datos Abiertos de Bogotá.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 2.png" alt="Descarga desde Mapas Bogotá">
+    </p>
+    <ol start="5">
+      <li>En el listado de formatos disponibles, busca el archivo Shapefile (<code>.shp</code>), selecciona Exportar y luego haz clic en Descargar.</li>
+      <li>Y Repite este mismo procedimiento con las demás bases que necesites de Mapas Bogotá.</li>
+      <li>En caso de que prefieras descargar directamente desde el portal de Datos Abiertos de Bogotá, busca la temática que te interese, selecciona la base correspondiente y asegúrate de que tenga el formato Shapefile (<code>.shp</code>). Luego sigue el mismo proceso explicado en los pasos anteriores para exportar y descargar.</li>
+    </ol>
+    <h3>Opción B: Descargar las bases de Localidades y UPZ desde el Laboratorio Urbano de Bogotá</h3>
+    <ol>
+      <li>Ir al navegador web</li>
+      <li>Para descargar las Localidades, ingresa a: <a href="https://bogota-laburbano.opendatasoft.com/explore/dataset/poligonos-localidades/table/" target="_blank">Localidades</a></li>
+      <li>Para descargar las UPZ, ingresa a: <a href="https://bogota-laburbano.opendatasoft.com/explore/dataset/upz-bogota/table/" target="_blank">UPZ</a></li>
+      <li>En cada página, selecciona la opción Exportar.</li>
+      <li>Descarga los archivos en formato Shapefile (<code>.shp</code>).</li>
+    </ol>
+
+    <!-- PASO 3 -->
+    <h2>PASO 3 Verificación de la carga de los datos</h2>
+    <ol>
+      <li>Arrastra los archivos descargados al panel de capas de QGIS; allí podrás verlos cargados en el proyecto.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 3.png" alt="image copy 3">
+    </p>
+    <ol start="2">
+      <li>Haz clic derecho sobre una capa para acceder a sus opciones: cambiar el nombre, o ver y modificar el SRC de la capa, entre otras.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 4.png" alt="image copy 4">
+    </p>
+    <ol start="3">
+      <li>Verifica que las capas tengan asignado el sistema de coordenadas correcto (si no lo tienen, haz clic en Propiedades → Fuente y selecciona el SRC; en caso de que el archivo venga con otro SRC, busca el archivo <em>.prj</em> con el mismo nombre original) y selecciona el SRC correcto (EPSG:3116).</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 5.png" alt="image copy 5">
+    </p>
+    <p>Otra forma de cargar los datos:</p>
+    <ol>
+      <li>En QGIS, ve al menú <strong>Capa → Añadir capa → Añadir capa vectorial</strong>.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 6.png" alt="image copy 6">
+    </p>
+    <ol start="2">
+      <li>En la sección <strong>Fuente</strong>, haz clic en los tres puntos (…) y navega hasta la carpeta donde guardaste tus capas.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 7.png" alt="image copy 7">
+    </p>
+    <ol start="3">
+      <li>Selecciona los archivos y haz clic en <strong>Añadir</strong>; las capas deberían aparecer en el panel de capas de QGIS.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 8.png" alt="image copy 8">
+    </p>
+
+    <!-- PASO 4 -->
+    <h2>PASO 4 CONFIGURACIÓN DE COLORES</h2>
+    <ol>
+      <li>Haz clic derecho sobre la capa y selecciona Propiedades.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 9.png" alt="image copy 9">
+    </p>
+    <ol start="2">
+      <li>En la ventana que se abre, ubícate en la pestaña Simbología.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 10.png" alt="image copy 10">
+    </p>
+    <ol start="3">
+      <li>Selecciona el Marcador simple y allí podrás cambiar el tamaño, el color de relleno, el estilo de la marca y otros parámetros de visualización.</li>
+    </ol>
+    <ol start="4">
+      <li>En la parte superior de la ventana de Simbología, aparece un cuadro con el nombre Símbolo único. Desde allí puedes cambiar el tipo de simbología (por ejemplo: categorías, graduado, etc.), lo que permite representar la información de manera más detallada.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 11.png" alt="image copy 11">
+    </p>
+    <ol start="5">
+      <li>Finalmente, haz clic en Aplicar y luego en Aceptar para guardar los cambios.</li>
+      <li>Repite este proceso con las demás capas para que todas tengan una visualización clara y coherente.</li>
+    </ol>
+
+    <!-- PASO 5 -->
+    <h2>PASO 5 HERRAMIENTAS VECTORIALES</h2>
+    <p>QGIS cuenta con una amplia variedad de herramientas para trabajar con datos vectoriales. En este paso aprenderemos a utilizar algunas funciones básicas.</p>
+    <ol>
+      <li>En la barra superior selecciona la opción <strong>Vectorial → Herramientas de geoprocesamiento</strong>. Allí encontrarás opciones como disolver, intersecar, unión, diferencia, entre otras.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 12.png" alt="image copy 12">
+    </p>
+    <ol start="2">
+      <li>Por ejemplo, con la herramienta <strong>Disolver</strong> puedes agrupar polígonos que comparten un mismo atributo (como la localidad a la que pertenecen).</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 13.png" alt="image copy 13">
+    </p>
+    <ol start="3">
+      <li>Al seleccionar la opción de Disolver, se abrirá una ventana donde debes indicar la capa de entrada y el campo por el cual deseas agrupar.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 14.png" alt="image copy 14">
+    </p>
+    <ol start="4">
+      <li>Define la ruta y el nombre del archivo de salida, y luego haz clic en <strong>Ejecutar</strong>.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 15.png" alt="image copy 15">
+    </p>
+    <ol start="5">
+      <li>Una vez finalizado el proceso, verás que en el panel de capas se añade la nueva capa resultante de la operación de disolver.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 16.png" alt="image copy 16">
+    </p>
+    <ol start="6">
+      <li>De la misma manera puedes utilizar las demás herramientas disponibles en el menú Vectorial para explorar distintos tipos de análisis espaciales.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 17.png" alt="image copy 17">
+    </p>
+    <ol start="7">
+      <li>Recuerda que cada herramienta genera una nueva capa de salida, la cual puedes guardar en una carpeta de tu elección para mantener organizados tus resultados.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 18.png" alt="image copy 18">
+    </p>
+
+    <!-- PASO 6 -->
+    <h2>PASO 6 VISUALIZACIÓN DE GRÁFICAS</h2>
+    <p>En esta sección utilizaremos un complemento para crear gráficas a partir de los atributos de las capas.</p>
+    <ol>
+      <li>En la barra superior selecciona <strong>Complementos → Administrar e instalar complementos</strong> y busca <em>DataPlotly</em>. Instálalo.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 19.png" alt="image copy 19">
+    </p>
+    <ol start="2">
+      <li>Abre el panel desde <strong>Complementos → DataPlotly → DataPlotly Panel</strong>.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 20.png" alt="image copy 20">
+    </p>
+    <ol start="3">
+      <li>Selecciona la capa, el tipo de gráfico y el campo a graficar. Luego crea la gráfica.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 21.png" alt="image copy 21">
+    </p>
+    <ol start="4">
+      <li>Visualiza y ajusta la gráfica desde el panel; puedes exportarla si lo requieres.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 22.png" alt="image copy 22">
+    </p>
+    <ol start="5">
+      <li>Prueba con otros tipos de gráficos y campos para explorar la información.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 23.png" alt="image copy 23">
+    </p>
+    <!-- Nota: dejamos QuickMapServices completo en PASO 7 y por esos cerramos el PASO 6 aquí con la parte de gráficas. -->
+
+    <!-- PASO 7 (texto exacto del .md, con imágenes 25–28 y solo una en Google Satellite Hybrid) -->
+    <h2>PASO 7 COMPLEMENTO QUICKMAPSERVICES</h2>
+    <p>Con este complemento podrás añadir mapas base desde múltiples servicios (Google, OSM, ESRI, entre otros) para complementar la visualización de tus datos vectoriales.</p>
+    <ol>
+      <li>En la barra superior selecciona la opción <strong>Complementos → Administrar e instalar complementos</strong>, escribe <em>QuickMapServices</em> en la barra de búsqueda e instálalo.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 25.png" alt="image copy 25">
+    </p>
+    <ol start="2">
+      <li>Luego dirígete a <strong>Web → QuickMapServices → Settings</strong>. Haz clic en la pestaña <em>More Services</em> y selecciona <strong>Get Contributed Pack</strong>. Con esto activarás todos los mapas disponibles.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 26.png" alt="image copy 26">
+    </p>
+    <ol start="3">
+      <li>Ahora dirígete a <strong>Web → QuickMapServices → Google → Google Satellite Hybrid</strong> para cargar el mapa satelital.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 27.png" alt="image copy 27">
+    </p>
+    <ol start="4">
+      <li>El mapa base satelital se cargará en el fondo, mostrando tus capas vectoriales superpuestas sobre la imagen de satélite.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 28.png" alt="image copy 28">
+    </p>
+
+    <!-- PASO 8 -->
+    <h2>PASO 8 Crear un mapa para impresión</h2>
+    <ol>
+      <li>En el menú, haz clic en <strong>Propiedades</strong> y selecciona <em>Nueva composición de impresión</em>.</li>
+      <li>Asigna un nombre a tu mapa para identificarlo fácilmente.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 29.png" alt="image copy 29">
+    </p>
+    <ol start="3">
+      <li>En el menú de la composición, dirígete a <em>Añadir elementos</em>.</li>
+      <li>Allí encontrarás opciones como añadir mapa, imágenes, etiquetas, flecha del norte, escala, entre otros. También puedes ver estas herramientas en la parte izquierda de la pantalla.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 30.png" alt="image copy 30">
+    </p>
+    <ol start="5">
+      <li>Para agregar un título, selecciona <em>Añadir etiqueta</em>. Desde ahí puedes escribir el nombre del mapa, además de cambiar el color, tipo de letra y tamaño del texto.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 31.png" alt="image copy 31">
+    </p>
+    <ol start="6">
+      <li>Una vez añadidos todos los elementos, tu mapa quedará listo para impresión.</li>
+    </ol>
+    <p align="center">
+      <img src="../img/image copy 32.png" alt="image copy 32">
+    </p>
+    <ol start="7">
+      <li>Finalmente, en el menú selecciona <em>Exportar a PDF</em>, haz clic y guarda tu mapa en tu computador o en la nube.</li>
+    </ol>
+    <p>Con esto concluimos la primera parte del tutorial de QGIS Vectorial.</p>
+
+  </div>
+
+  <footer>
+    Desarrollado por la Consultora de la Facultad de Estadística - Universidad Santo Tomás © 2025
+  </footer>
+</body>
+</html>
