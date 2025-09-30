@@ -1,0 +1,91 @@
+/* ===========================
+   Colores USTA
+=========================== */
+:root {
+  --usta-blue: #002b7f;
+  --usta-yellow: #ffcc00;
+  --usta-red: #d22730;
+  --usta-gray: #f5f5f5;
+  --usta-dark: #212529;
+  --usta-white: #ffffff;
+}
+
+/* ===========================
+   Estilo General
+=========================== */
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  margin: 0;
+  background: var(--usta-gray);
+  color: var(--usta-dark);
+  line-height: 1.6;
+}
+
+/* ===========================
+   Header
+=========================== */
+header {
+  background: var(--usta-blue);
+  color: var(--usta-white);
+  padding: 2rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* ===========================
+   Navegación
+=========================== */
+nav {
+  background: var(--usta-yellow);
+  padding: 0.8rem;
+  text-align: center;
+}
+
+nav a {
+  color: var(--usta-dark);
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: var(--usta-red);
+}
+
+/* ===========================
+   Contenido
+=========================== */
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: var(--usta-white);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+h2 {
+  color: var(--usta-blue);
+  margin-top: 0;
+}
+
+/* ===========================
+   Footer
+=========================== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  background: var(--usta-blue);
+  color: var(--usta-white);
+}

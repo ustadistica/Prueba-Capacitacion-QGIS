@@ -2,237 +2,34 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial: Análisis Geoespacial con Python y QGIS</title>
-  <!-- Tipografías -->
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <!-- D3.js -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    /* --- Paleta USTA --- */
-    :root {
-      --usta-blue: #002f6c;
-      --usta-yellow: #ffcc00;
-      --usta-red: #c8102e;
-      --usta-dark: #1a1a1a;
-      --usta-light: #f9f9f9;
-      --white: #ffffff;
-    }
-
-    body {
-      font-family: 'Montserrat', Arial, sans-serif;
-      background-color: var(--usta-light);
-      color: var(--usta-dark);
-      margin: 0;
-      line-height: 1.7;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
-
-    /* --- Encabezado --- */
-    .hero-header {
-      position: relative;
-      text-align: center;
-      padding: 5rem 2rem;
-      border-radius: 16px;
-      overflow: hidden;
-      background: linear-gradient(135deg, var(--usta-blue), var(--usta-red));
-      color: var(--white);
-      margin-bottom: 3rem;
-    }
-
-    .hero-header h1 {
-      font-family: 'Merriweather', serif;
-      font-size: 3rem;
-      margin: 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-header .subtitle {
-      font-size: 1.2rem;
-      margin-top: 0.5rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    #d3-canvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 1;
-    }
-
-    /* --- Sección Intro --- */
-    .qgis-intro {
-      background-color: var(--white);
-      padding: 2.5rem;
-      border-radius: 16px;
-      margin-bottom: 3rem;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
-    }
-
-    .qgis-intro h2 {
-      font-size: 2.2rem;
-      font-family: 'Merriweather', serif;
-      color: var(--usta-blue);
-      text-align: center;
-      margin-bottom: 2rem;
-      border-bottom: 3px solid var(--usta-yellow);
-      display: inline-block;
-      padding-bottom: 0.3rem;
-    }
-
-    .intro-columns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .intro-text p {
-      font-size: 1.1rem;
-    }
-
-    /* --- Tarjetas --- */
-    .tutorial-card {
-      background-color: var(--white);
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.07);
-      margin-bottom: 2.5rem;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-left: 6px solid var(--usta-yellow);
-    }
-
-    .tutorial-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-    }
-
-    .card-content {
-      padding: 2.5rem;
-    }
-
-    .card-content h3 {
-      font-size: 1.8rem;
-      color: var(--usta-blue);
-      font-family: 'Merriweather', serif;
-      margin-top: 0;
-      margin-bottom: 1rem;
-    }
-
-    /* --- Lista --- */
-    .topics-list {
-      list-style: none;
-      padding: 0;
-      margin: 1.5rem 0;
-    }
-
-    .topics-list li {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    .topics-list .icon {
-      color: var(--usta-red);
-      margin-right: 1rem;
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-    }
-
-    /* --- Botón --- */
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--usta-yellow);
-      color: var(--usta-dark);
-      padding: 14px 28px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .cta-button:hover {
-      transform: scale(1.05);
-      background: var(--usta-red);
-      color: var(--white);
-    }
-
-    /* --- Pie de Página --- */
-    .footer {
-      text-align: center;
-      padding: 2rem 0;
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #6c757d;
-    }
-
-    .footer a {
-      color: var(--usta-blue);
-      font-weight: bold;
-    }
-  </style>
+  <title>Tutorial QGIS + Python | USTA</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <header>
+    <h1>Capacitación en QGIS con Python</h1>
+    <p>Universidad Santo Tomás - Estadística</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="tutorials/tutorial1.html">Fundamentos de GeoPandas</a>
+    <a href="tutorials/tutorial2.html">Geocodificación</a>
+  </nav>
+
   <div class="container">
-
-    <!-- Encabezado -->
-    <header class="hero-header">
-      <svg id="d3-canvas"></svg>
-      <h1>Capacitación en QGIS y Python</h1>
-      <p class="subtitle">Universidad Santo Tomás – Facultad de Estadística</p>
-    </header>
-
-    <main>
-      <!-- Intro -->
-      <section class="qgis-intro">
-        <h2>¿Qué es QGIS?</h2>
-        <div class="intro-columns">
-          <div class="intro-text">
-            <p>
-              QGIS es un <strong>Sistema de Información Geográfica (SIG)</strong> profesional, libre y de código abierto.
-              Permite <strong>visualizar, gestionar, editar y analizar datos geográficos</strong> para proyectos de cartografía, análisis territorial y gestión espacial.
-            </p>
-            <p>
-              Al combinarlo con <strong>Python</strong>, es posible automatizar procesos y realizar análisis avanzados que potencian tus investigaciones y proyectos académicos.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tarjeta ejemplo -->
-      <section class="tutorial-card">
-        <div class="card-content">
-          <h3>1. Fundamentos de GeoPandas</h3>
-          <p>
-            Aprende a manipular datos geográficos en Python con GeoPandas, una librería que une Pandas y geometrías espaciales.
-          </p>
-          <ul class="topics-list">
-            <li>📂 <strong>Carga de datos vectoriales</strong></li>
-            <li>🗺️ <strong>Visualización de mapas</strong></li>
-            <li>🌍 <strong>Sistemas de coordenadas (CRS)</strong></li>
-          </ul>
-          <a href="#" class="cta-button">Abrir cuaderno en Colab</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <p>
-        Desarrollado para la comunidad de la Universidad Santo Tomás. <br>
-        Código disponible en <a href="#">GitHub</a>.
-      </p>
-    </footer>
+    <h2>Bienvenidos</h2>
+    <p>
+      Esta web recopila tutoriales, ejemplos y material de apoyo para la capacitación en 
+      <strong>análisis geoespacial con Python y QGIS</strong>.
+    </p>
+    <p>
+      Usa el menú de navegación para acceder a cada tutorial.
+    </p>
   </div>
+
+  <footer>
+    Desarrollado por la Universidad Santo Tomás © 2025
+  </footer>
 </body>
 </html>
