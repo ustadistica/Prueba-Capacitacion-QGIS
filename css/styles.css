@@ -42,32 +42,32 @@ header p {
 }
 
 /* ===========================
-   Navegación Sticky
+   Navegación Sticky Amarilla
 =========================== */
 nav {
-  background: var(--usta-red);       /* Fondo rojo USTA */
+  background: var(--usta-yellow);    /* Fondo amarillo USTA */
   padding: 0.8rem;
   text-align: center;
-  position: sticky;                  /* Fijo al hacer scroll */
-  top: 0;                            /* Siempre en la parte superior */
-  z-index: 1000;                     /* Encima del contenido */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* Sombra elegante */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 nav a {
-  color: var(--usta-white);          /* Texto en blanco */
+  color: var(--usta-dark);           /* Texto oscuro sobre amarillo */
   text-decoration: none;
   margin: 0 1rem;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border-radius: 25px;               /* Botones redondeados estilo pill */
+  border-radius: 25px;               /* Botones redondeados */
   transition: all 0.3s ease;
 }
 
 nav a:hover {
-  font-weight: bold;                 /* Negrilla en hover */
-  color: var(--usta-yellow);         /* Amarillo USTA */
-  background: rgba(255,255,255,0.1); /* Fondo sutil en hover */
+  font-weight: bold;
+  color: var(--usta-red);            /* Rojo USTA en hover */
+  background: rgba(0,0,0,0.05);      /* Fondo sutil */
   text-decoration: underline;
 }
 
@@ -84,8 +84,13 @@ nav a:hover {
 }
 
 h2 {
-  color: var(--usta-blue);
+  color: var(--usta-red);            /* Títulos principales en rojo */
   margin-top: 0;
+}
+
+h3 {
+  color: var(--usta-blue);           /* Subtítulos/pasos en azul */
+  margin-top: 1.5rem;
 }
 
 /* ===========================
