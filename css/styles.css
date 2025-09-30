@@ -42,23 +42,33 @@ header p {
 }
 
 /* ===========================
-   Navegación
+   Navegación Sticky
 =========================== */
 nav {
-  background: var(--usta-yellow);
+  background: var(--usta-red);       /* Fondo rojo USTA */
   padding: 0.8rem;
   text-align: center;
+  position: sticky;                  /* Fijo al hacer scroll */
+  top: 0;                            /* Siempre en la parte superior */
+  z-index: 1000;                     /* Encima del contenido */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* Sombra elegante */
 }
 
 nav a {
-  color: var(--usta-dark);
+  color: var(--usta-white);          /* Texto en blanco */
   text-decoration: none;
   margin: 0 1rem;
-  font-weight: bold;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;               /* Botones redondeados estilo pill */
+  transition: all 0.3s ease;
 }
 
 nav a:hover {
-  color: var(--usta-red);
+  font-weight: bold;                 /* Negrilla en hover */
+  color: var(--usta-yellow);         /* Amarillo USTA */
+  background: rgba(255,255,255,0.1); /* Fondo sutil en hover */
+  text-decoration: underline;
 }
 
 /* ===========================
