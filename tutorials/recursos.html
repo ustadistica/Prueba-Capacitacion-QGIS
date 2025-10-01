@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recursos | QGIS + Python</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <style>
+    /* Estilos ligeros para tarjetas/listas */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      background: var(--usta-white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .card h3 { margin-top: 0; color: var(--usta-blue); }
+    .card p { margin-bottom: 0.6rem; }
+    .list-clean { margin: 0; padding-left: 1.1rem; }
+    .list-clean li { margin: 0.35rem 0; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      background: var(--usta-yellow);
+      color: var(--usta-dark);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 0.4rem;
+    }
+    .note {
+      background: #fffbea;
+      border: 1px solid #ffe58f;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.95rem;
+    }
+    .links-row {
+      display: flex; gap: .7rem; flex-wrap: wrap; margin-top:.4rem
+    }
+    .btn-link { /* ya lo usamos en index; lo dejo por si no lo tienes */
+      display:inline-block; background: var(--usta-blue); color: var(--usta-white);
+      padding:.5rem .9rem; border-radius:22px; text-decoration:none; font-weight:600;
+      transition:all .2s ease;
+    }
+    .btn-link:hover { background:#001f5a; color: var(--usta-yellow); text-decoration:underline; }
+    .muted { color:#666; font-size:.92rem }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Recursos</h1>
+    <p>Notebooks, contenidos académicos y referencias del curso QGIS + Python</p>
+  </header>
+
+  <nav>
+    <a href="../index.html">Inicio</a>
+    <a href="../tutorials/tutorial1.html">Tutorial 1</a>
+    <a href="../tutorials/tutorial2.html">Tutorial 2</a>
+    <a href="recursos.html" aria-current="page">Recursos</a>
+  </nav>
+
+  <div class="container">
+    <h2>Notebooks</h2>
+    <p class="note">
+      Aquí encuentras los cuadernos ejecutables en Google Colab y sus versiones de solo lectura en GitHub. 
+      Recomendación: abre en Colab para ejecutar paso a paso. 
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>GeoPandas: Fundamentos <span class="badge">Colab</span></h3>
+        <p>Manipulación de datos geográficos (lectura de <code>.shp</code>, CRS, operaciones básicas).</p>
+        <div class="links-row">
+          <a class="btn-link" target="_blank" href="https://colab.research.google.com/github/ustadistica/tutorial-de-como-usar-qgis-con-python-/blob/main/Docs/QGIS_En_Python.ipynb">Abrir en Colab</a>
+          <a class="btn-link" target="_blank" href="https://github.com/ustadistica/tutorial-de-como-usar-qgis-con-python-/blob/main/Docs/QGIS_En_Python.ipynb">Ver en GitHub</a>
+        </div>
+        <p class="muted">Requisitos: geopandas, pyproj, shapely, matplotlib.</p>
+      </div>
+
+      <div class="card">
+        <h3>Geocodificación de direcciones <span class="badge">Colab</span></h3>
+        <p>Uso de <code>geopy</code> para transformar textos de direcciones en coordenadas y visualizar en mapa.</p>
+        <div class="links-row">
+          <a class="btn-link" target="_blank" href="https://colab.research.google.com/github/ustadistica/tutorial-de-como-usar-qgis-con-python-/blob/main/Docs/Geocodificacion_Ejemplo_Python.ipynb">Abrir en Colab</a>
+          <a class="btn-link" target="_blank" href="https://github.com/ustadistica/tutorial-de-como-usar-qgis-con-python-/blob/main/Docs/Geocodificacion_Ejemplo_Python.ipynb">Ver en GitHub</a>
+        </div>
+        <p class="muted">Requisitos: geopy, pandas, folium.</p>
+      </div>
+
+      <!-- Agrega más tarjetas de notebooks si deseas -->
+    </div>
+
+    <h2>Contenidos académicos</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Diapositivas</h3>
+        <ul class="list-clean">
+          <!-- Reemplaza href por tus rutas reales (PDF en /docs o enlaces de Drive) -->
+          <li><a target="_blank" href="../docs/Intro_QGIS.pdf">Introducción a QGIS (PDF)</a></li>
+          <li><a target="_blank" href="../docs/Vectorial_QGIS.pdf">QGIS Vectorial: flujo de trabajo (PDF)</a></li>
+          <li><a target="_blank" href="../docs/Raster_QGIS.pdf">QGIS Ráster: simbología y análisis (PDF)</a></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Guías y material</h3>
+        <ul class="list-clean">
+          <li><a target="_blank" href="../docs/atajos_qgis.pdf">Atajos de teclado QGIS</a></li>
+          <li><a target="_blank" href="../docs/checklist_proyecto_sig.pdf">Checklist para proyectos SIG</a></li>
+          <li><a target="_blank" href="../docs/estandares_cartograficos.pdf">Estándares cartográficos básicos</a></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Datos de ejemplo</h3>
+        <ul class="list-clean">
+          <li><a target="_blank" href="../data/bogota_localidades.zip">Localidades Bogotá (SHP)</a></li>
+          <li><a target="_blank" href="../data/bogota_upz.zip">UPZ Bogotá (SHP)</a></li>
+          <li><a target="_blank" href="https://storage.googleapis.com/mapbiomas-public/initiatives/colombia/collection_2/lulc/mapbiomas_colombia_collection2_integration_v1/mapbiomas_colombia_coclassification_2023.tif">MapBiomas 2023 (TIF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Referencias</h2>
+    <div class="card">
+      <ul class="list-clean">
+        <li><a target="_blank" href="https://qgis.org/es/site/">Sitio oficial de QGIS</a></li>
+        <li><a target="_blank" href="https://docs.qgis.org/">Documentación oficial QGIS</a></li>
+        <li><a target="_blank" href="https://plugins.qgis.org/">Repositorio de complementos QGIS</a></li>
+        <li><a target="_blank" href="https://geopandas.org/">GeoPandas</a> &middot; <a target="_blank" href="https://pyproj4.github.io/pyproj/stable/">PyProj</a> &middot; <a target="_blank" href="https://rasterio.readthedocs.io/">Rasterio</a></li>
+        <li><a target="_blank" href="https://mapas.bogota.gov.co/">Bogotá Mapas</a> &middot; <a target="_blank" href="https://www.datos.gov.co/">Datos Abiertos</a></li>
+        <li><a target="_blank" href="https://www.mapbiomas.org/">MapBiomas</a></li>
+      </ul>
+      <p class="muted" style="margin-top:.6rem">Sugerencia: si algún enlace es de Google Drive, configúralo como “Disponible para cualquiera con el enlace”.</p>
+    </div>
+
+  </div>
+
+  <footer>
+    Desarrollado por la Consultora de la Facultad de Estadística - Universidad Santo Tomás © 2025
+  </footer>
+</body>
+</html>
