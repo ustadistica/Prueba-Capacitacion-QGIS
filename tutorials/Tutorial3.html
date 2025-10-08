@@ -62,7 +62,10 @@ df = pd.read_excel("/content/tabla de atributos de menores (1).xlsx")  # ajusta 
 
 df.head()</code></pre>
 
-    <!-- IMG 1: df.head() desde Excel -->
+<div class="img-center">
+  <img src="../img/copy image 49.jpeg" alt="Vista inicial de la tabla de atributos en Python">
+</div>
+    
     <div class="img-center">
       <!-- Reemplaza el src por el nombre real de tu imagen #1 -->
       <img src="../img/p4_01_df_head.png" alt="Vista inicial de df.head() (tabla de atributos desde Excel)">
@@ -77,7 +80,10 @@ display(geo_df.head())
 geo_df.crs  # verifica el CRS de origen
 </code></pre>
 
-    <!-- IMG 2: geo_df.head() -->
+ <div class="img-center">
+  <img src="../img/copy image 50.jpeg" alt="Geometrías de localidades cargadas desde archivo ZIP">
+</div>
+    
     <div class="img-center">
       <img src="../img/p4_02_geo_df_head.png" alt="Polígonos: geo_df.head() cargado desde ZIP">
     </div>
@@ -100,7 +106,10 @@ merged_df = df.merge(geo_df, left_on="LocNombre", right_on="Nombre_de_l")
 gdf = gpd.GeoDataFrame(merged_df, geometry="geometry")
 gdf.head()</code></pre>
 
-    <!-- IMG 3: merged_df/gdf.head() -->
+<div class="img-center">
+  <img src="../img/copy image 51.jpeg" alt="DataFrame unido con geometría (gdf.head())">
+</div>
+    
     <div class="img-center">
       <img src="../img/p4_03_merge_gdf_head.png" alt="DataFrame unido con geometría (gdf.head())">
     </div>
@@ -114,7 +123,10 @@ ax.set_title("Mapa de Áreas Geográficas con Colores", loc="left")
 ax.set_axis_off()
 plt.show()</code></pre>
 
-    <!-- IMG 4: mapa de polígonos -->
+<div class="img-center">
+  <img src="../img/copy image 52.jpeg" alt="Mapa de áreas geográficas con colores">
+</div>
+    
     <div class="img-center">
       <img src="../img/p4_04_mapa_poligonos.png" alt="Mapa de áreas por localidad (polígonos)">
     </div>
@@ -128,7 +140,10 @@ display(points_gdf.head())
 if points_gdf.crs != gdf.crs:
     points_gdf = points_gdf.to_crs(gdf.crs)</code></pre>
 
-    <!-- IMG 5: points_gdf.head() -->
+<div class="img-center">
+  <img src="../img/copy image 53.jpeg" alt="Datos de puntos cargados desde cons.zip">
+</div>
+
     <div class="img-center">
       <img src="../img/p4_05_points_head.png" alt="Vista inicial de points_gdf.head()">
     </div>
@@ -150,7 +165,10 @@ ax.set_title("Mapa de Áreas Geográficas con Puntos", loc="left")
 ax.set_axis_off()
 plt.show()</code></pre>
 
-    <!-- IMG 6: mapa de puntos sobre polígonos -->
+<div class="img-center">
+  <img src="../img/copy image 54.jpeg" alt="Mapa de áreas geográficas con puntos superpuestos">
+</div>
+    
     <div class="img-center">
       <img src="../img/p4_06_mapa_puntos.png" alt="Mapa de áreas con puntos superpuestos">
     </div>
@@ -179,4 +197,5 @@ points_gdf.to_file("salidas/consultorios.geojson", driver="GeoJSON")</code></pre
   </footer>
 </body>
 </html>
+
 
