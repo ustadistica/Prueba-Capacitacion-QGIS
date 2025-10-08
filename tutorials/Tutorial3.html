@@ -3,294 +3,177 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pasemos a python</title>
+  <title>Análisis de la tabla de atributos en Python</title>
   <link rel="stylesheet" href="../css/styles.css"/>
   <style>
+    /* Estilos mínimos para bloques de código */
     pre {
-      background: #0f172a;
-      color: #e2e8f0;
-      padding: 1rem;
-      border-radius: 8px;
-      overflow: auto;
-      font-size: .95rem;
-      line-height: 1.45;
+      background: #0f172a; color: #e2e8f0;
+      padding: 1rem; border-radius: 8px; overflow: auto;
+      font-size: .95rem; line-height: 1.45;
     }
     code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     .img-center { text-align:center; margin: 1rem 0; }
-    .img-center img { max-width: 90%; height: auto; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-    .note {
-      background: #fffbea; border:1px solid #ffe58f; padding:.9rem 1rem; border-radius:8px; margin:1rem 0;
-    }
+    .img-center img { max-width: 92%; height: auto; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+    .note { background:#fffbea; border:1px solid #ffe58f; padding:.9rem 1rem; border-radius:8px; margin:1rem 0; }
   </style>
 </head>
 <body>
   <header>
-    <h1>QGIS → Python (Análisis de la tabla de atributos)</h1>
+    <h1>Análisis de la tabla de atributos en Python</h1>
     <p>Consultora de la Facultad de Estadística - Universidad Santo Tomás</p>
   </header>
 
   <nav>
-<a href="index.html">Inicio</a>
-    <a href="tutorials/../Introducción.html">Introducción Web</a>
-    <a href="tutorials/../Tutorial1.html">Empecemos con Qgis</a>
-    <a href="tutorials/../Tutorial2.html">Ahora con Raster</a>
-    <a href="tutorials/../recursos.html">Recursos</a>
+    <a href="../index.html">Inicio</a>
+    <a href="tutorial1.html">Tutorial 1</a>
+    <a href="tutorial2.html">Tutorial 2</a>
+    <a href="tutorial3.html">Tutorial 3</a>
+    <a href="tutorial4.html" aria-current="page">Tutorial 4</a>
+    <a href="../pages/recursos.html">Recursos</a>
   </nav>
 
   <div class="container">
+
     <h2>Introducción</h2>
     <p>
-      En esta última sección aprenderás a <strong>exportar la información de QGIS hacia Python</strong> para analizarla con
-      <strong>Pandas</strong> y <strong>GeoPandas</strong>, crear gráficos y mapas, combinarla con otras fuentes de datos
-      y <strong>exportar resultados</strong> nuevamente a formatos compatibles con QGIS.
+      En este módulo conectamos QGIS con Python para analizar la <strong>tabla de atributos</strong> exportada desde QGIS,
+      unirla con las <strong>geometrías</strong> y con una capa de <strong>puntos</strong>, y producir mapas y salidas listas para volver a QGIS.
+      Verás un flujo completo y reproducible: <em>leer datos → limpiar/estandarizar → unir → visualizar → exportar</em>.
     </p>
-    <p>
-      Partimos de la <em>tabla de atributos</em> que ya trabajaste en QGIS; aquí construiremos un flujo reproducible:
-      <strong>exportar → leer en Python → EDA → unir datos → visualizar → exportar</strong>.
-    </p>
-
-    <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN DE PORTADA DEL MÓDULO -->
-      <img src="../img/tu_imagen_portada_parte3.png" alt="Portada Parte 3 QGIS → Python">
-    </div>
-
-    <h2>1) Exportar la tabla de atributos desde QGIS</h2>
-    <ol>
-      <li>Haz clic derecho en la capa de interés (ej. <em>UPZ Bogotá</em> o <em>Consultorios</em>).</li>
-      <li>Selecciona <strong>Abrir tabla de atributos</strong>.</li>
-      <li>En la tabla: <strong>Opciones → Exportar → Guardar como</strong>.</li>
-      <li>Elige formato <strong>CSV</strong> (si solo necesitas atributos) o <strong>GeoPackage/GeoJSON/SHP</strong> (si quieres geometría).</li>
-      <li>Asigna un nombre (p.ej. <code>consultorios.csv</code> o <code>upz.gpkg</code>) y guarda.</li>
-    </ol>
-
-    <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 1 (Exportar desde QGIS) -->
-      <img src="../img/parte3_exportar_qgis.png" alt="Exportar tabla de atributos desde QGIS">
-    </div>
 
     <div class="note">
-      <strong>Recomendación:</strong> si vas a usar mapas en Python (GeoPandas), exporta un <em>formato con geometría</em>
-      (GeoPackage <code>.gpkg</code>, GeoJSON <code>.geojson</code> o Shapefile <code>.shp</code>).
+      <strong>Requisitos:</strong> <code>pandas</code>, <code>geopandas</code>, <code>matplotlib</code>, <code>pyproj</code>, <code>shapely</code>.
+      (Opcional: <code>contextily</code>, <code>folium</code> para teselas e interacción).
     </div>
 
-    <h2>2) Preparar el entorno en Python</h2>
-    <p>Instala (si no tienes) las dependencias mínimas:</p>
-    <pre><code class="language-bash"># Con pip
-pip install pandas geopandas pyproj shapely matplotlib folium contextily requests
-
-# Con conda (opcional)
-conda install -c conda-forge pandas geopandas shapely pyproj matplotlib folium contextily
+    <h2>Paso 0 — Preparación del entorno</h2>
+    <pre><code class="language-bash"># Instalar (si hace falta)
+pip install pandas geopandas matplotlib pyproj shapely
+# opcional
+pip install contextily folium
 </code></pre>
 
-    <h2>3) Cargar datos en Python (Pandas / GeoPandas)</h2>
-    <h3>3.1. Si exportaste CSV (solo atributos)</h3>
+    <h2>Paso 1 — Leer la tabla de atributos (Excel/CSV)</h2>
+    <p>Si exportaste la tabla desde QGIS en <strong>Excel</strong> (o CSV), cárgala con Pandas:</p>
     <pre><code class="language-python">import pandas as pd
 
-df = pd.read_csv("data/consultorios.csv", encoding="utf-8")  # ajusta ruta/encoding
-print(df.head())
-print(df.info())
-</code></pre>
+df = pd.read_excel("/content/tabla de atributos de menores (1).xlsx")  # ajusta ruta/nombre
+# Si fuera CSV:
+# df = pd.read_csv("data/tabla_atributos.csv", encoding="utf-8")
 
+df.head()</code></pre>
+
+    <!-- IMG 1: df.head() desde Excel -->
     <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 2 (Lectura CSV) -->
-      <img src="../img/parte3_lectura_csv.png" alt="Lectura CSV en Python">
+      <!-- Reemplaza el src por el nombre real de tu imagen #1 -->
+      <img src="../img/p4_01_df_head.png" alt="Vista inicial de df.head() (tabla de atributos desde Excel)">
     </div>
 
-    <h3>3.2. Si exportaste con geometría (GeoPackage/GeoJSON/SHP)</h3>
+    <h2>Paso 2 — Cargar geometrías (polígonos) desde ZIP</h2>
+    <p>Lee las geometrías (polígonos de localidades) comprimidas en ZIP directamente con GeoPandas:</p>
     <pre><code class="language-python">import geopandas as gpd
 
-# Ejemplos equivalentes (usa el que corresponda a tu archivo)
-gdf = gpd.read_file("data/upz.gpkg")        # GeoPackage
-# gdf = gpd.read_file("data/upz.geojson")   # GeoJSON
-# gdf = gpd.read_file("data/upz.shp")       # Shapefile
-
-print(gdf.head())
-print(gdf.crs)      # sistema de referencia de coordenadas
+geo_df = gpd.read_file("/content/poligonos-localidades.zip")  # .shp dentro del .zip
+display(geo_df.head())
+geo_df.crs  # verifica el CRS de origen
 </code></pre>
+
+    <!-- IMG 2: geo_df.head() -->
+    <div class="img-center">
+      <img src="../img/p4_02_geo_df_head.png" alt="Polígonos: geo_df.head() cargado desde ZIP">
+    </div>
 
     <div class="note">
-      <strong>CRS Bogotá:</strong> para proyectos locales usa EPSG:3116 <em>(MAGNA-SIRGAS / Bogotá zone)</em>.
-      Si tu capa está en otra proyección, reproyéctala:
+      <strong>CRS recomendado Bogotá:</strong> EPSG:3116. Si el shapefile está en otro CRS, reproyecta:
+      <pre><code class="language-python">geo_df = geo_df.to_crs(3116)</code></pre>
     </div>
 
-    <pre><code class="language-python"># Reproyección a EPSG:3116
-gdf3116 = gdf.to_crs(epsg=3116)
-</code></pre>
+    <h2>Paso 3 — Limpiar claves y hacer <em>merge</em></h2>
+    <p>Asegúrate de que los campos usados para unir (por ejemplo <code>LocNombre</code> en df y <code>Nombre_de_l</code> en geo_df) estén normalizados (trim, mayúsculas, etc.).</p>
+    <pre><code class="language-python"># Estandarizar nombres antes de unir
+df["LocNombre"]      = df["LocNombre"].str.strip()
+geo_df["Nombre_de_l"] = geo_df["Nombre_de_l"].str.strip()
 
+# Unir atributos (df) con geometrías (geo_df)
+merged_df = df.merge(geo_df, left_on="LocNombre", right_on="Nombre_de_l")
+
+# Convertir a GeoDataFrame conservando la columna geometry de geo_df
+gdf = gpd.GeoDataFrame(merged_df, geometry="geometry")
+gdf.head()</code></pre>
+
+    <!-- IMG 3: merged_df/gdf.head() -->
     <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 3 (CRS / Reproyección) -->
-      <img src="../img/parte3_crs_reproyeccion.png" alt="CRS y Reproyección EPSG:3116">
+      <img src="../img/p4_03_merge_gdf_head.png" alt="DataFrame unido con geometría (gdf.head())">
     </div>
 
-    <h2>4) Exploración inicial (EDA)</h2>
-    <pre><code class="language-python"># Pandas
-df.describe(include="all")
-df.isna().sum()          # valores faltantes
-df.nunique()             # cardinalidad por columna
-df["barrio"].value_counts().head(10)  # ejemplo
-
-# GeoPandas
-gdf3116.describe()
-gdf3116.geometry.type.value_counts()
-</code></pre>
-
-    <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 4 (Resumen/Describe) -->
-      <img src="../img/parte3_eda_describe.png" alt="EDA describe">
-    </div>
-
-    <h3>4.1. Gráficas rápidas</h3>
+    <h2>Paso 4 — Mapa de áreas por localidad (polígonos)</h2>
+    <p>Dibuja un mapa simple por localidad. Los colores se asignan automáticamente; puedes ajustar el esquema según tu variable (categoría/valor).</p>
     <pre><code class="language-python">import matplotlib.pyplot as plt
 
-# Histograma
-df["poblacion"].plot(kind="hist", bins=20, edgecolor="white")
-plt.title("Distribución de la población")
-plt.xlabel("Población")
-plt.ylabel("Frecuencia")
-plt.show()
-
-# Barras por categoría
-df.groupby("localidad")["consultorios"].sum().sort_values().plot(kind="barh")
-plt.title("Consultorios por localidad")
-plt.xlabel("Total")
-plt.ylabel("Localidad")
-plt.show()
-</code></pre>
-
-    <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 5 (Gráficos) -->
-      <img src="../img/parte3_graficos.png" alt="Gráficos EDA">
-    </div>
-
-    <h2>5) Unir con otras fuentes (merge)</h2>
-    <p>Ejemplo: unir atributos con indicadores externos (salud, educación, etc.) por código común (ej. <code>COD_UPZ</code>).</p>
-    <pre><code class="language-python">import pandas as pd
-
-indicadores = pd.read_csv("data/indicadores_salud.csv")  # COD_UPZ, tasa_camas, etc.
-df_merged = df.merge(indicadores, on="COD_UPZ", how="left")
-df_merged.head()
-</code></pre>
-
-    <div class="note">
-      Si trabajas con geometrías, haz el merge sobre el <code>GeoDataFrame</code> para conservar la columna <code>geometry</code>:
-    </div>
-
-    <pre><code class="language-python">gdf_merged = gdf3116.merge(indicadores, on="COD_UPZ", how="left")
-</code></pre>
-
-    <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 6 (Merge) -->
-      <img src="../img/parte3_merge.png" alt="Unión de datos (merge)">
-    </div>
-
-    <h2>6) Mapas en Python</h2>
-    <h3>6.1. Mapa temático estático (GeoPandas)</h3>
-    <pre><code class="language-python">ax = gdf_merged.plot(
-    column="poblacion",
-    cmap="OrRd",
-    legend=True,
-    figsize=(8,6),
-    linewidth=.3,
-    edgecolor="#444"
-)
-ax.set_title("Densidad de población por UPZ")
-ax.axis("off")
-</code></pre>
-
-    <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 7 (Choropleth) -->
-      <img src="../img/parte3_mapa_choropleth.png" alt="Mapa temático con GeoPandas">
-    </div>
-
-    <h3>6.2. Mapa con teselas base (Contextily)</h3>
-    <pre><code class="language-python">import contextily as cx
-
-# Reproyectar a Web Mercator (EPSG:3857) para añadir teselas
-gdf3857 = gdf_merged.to_crs(3857)
-
-ax = gdf3857.plot(column="poblacion", cmap="OrRd", legend=True, figsize=(9,7))
-cx.add_basemap(ax, source=cx.providers.CartoDB.Positron)
+ax = gdf.plot(column="LocNombre", legend=True, figsize=(7,9), edgecolor="#444", linewidth=.4)
+ax.set_title("Mapa de Áreas Geográficas con Colores", loc="left")
 ax.set_axis_off()
-plt.show()
-</code></pre>
+plt.show()</code></pre>
 
+    <!-- IMG 4: mapa de polígonos -->
     <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 8 (Basemap) -->
-      <img src="../img/parte3_mapa_basemap.png" alt="Mapa con teselas base">
+      <img src="../img/p4_04_mapa_poligonos.png" alt="Mapa de áreas por localidad (polígonos)">
     </div>
 
-    <h3>6.3. Mapa interactivo (Folium)</h3>
-    <pre><code class="language-python">import folium
+    <h2>Paso 5 — Cargar puntos (consultorios) desde ZIP</h2>
+    <p>Lee la capa de <strong>puntos</strong> (por ejemplo, consultorios) comprimida en ZIP:</p>
+    <pre><code class="language-python">points_gdf = gpd.read_file("/content/cons.zip")
+display(points_gdf.head())
 
-# Centro aproximado (Bogotá)
-m = folium.Map(location=[4.65, -74.1], zoom_start=11, tiles="CartoDB positron")
+# Alinea CRS de puntos con el de gdf para graficar juntos
+if points_gdf.crs != gdf.crs:
+    points_gdf = points_gdf.to_crs(gdf.crs)</code></pre>
 
-# Capa coroplética (si cuentas con GeoJSON)
-gdf_geojson = gdf_merged.to_crs(4326)  # Folium usa WGS84
-folium.Choropleth(
-    geo_data=gdf_geojson.to_json(),
-    data=gdf_geojson,
-    columns=["COD_UPZ", "poblacion"],
-    key_on="feature.properties.COD_UPZ",
-    fill_color="YlOrRd",
-    fill_opacity=0.8,
-    line_opacity=0.3,
-    legend_name="Población"
-).add_to(m)
-
-m.save("salidas/mapa_interactivo.html")
-m
-</code></pre>
-
+    <!-- IMG 5: points_gdf.head() -->
     <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 9 (Mapa interactivo) -->
-      <img src="../img/parte3_mapa_interactivo.png" alt="Mapa interactivo Folium">
+      <img src="../img/p4_05_points_head.png" alt="Vista inicial de points_gdf.head()">
     </div>
 
-    <h2>7) Guardar resultados para volver a QGIS</h2>
-    <p>Exportar resultados (con geometría) a formatos compatibles con QGIS:</p>
-    <pre><code class="language-python"># GeoPackage (recomendado)
-gdf_merged.to_file("salidas/resultados.gpkg", driver="GPKG")
+    <h2>Paso 6 — Mapa de polígonos + puntos</h2>
+    <p>Superpone los puntos sobre las áreas para una vista conjunta.</p>
+    <pre><code class="language-python">fig, ax = plt.subplots(figsize=(7,9))
 
-# GeoJSON
-gdf_merged.to_file("salidas/resultados.geojson", driver="GeoJSON")
+# Capa base: polígonos
+gdf.plot(ax=ax, color="#cfd8dc", edgecolor="#444", linewidth=.4)
 
-# Shapefile (evítalo si tienes muchos campos largos o UTF-8)
-gdf_merged.to_file("salidas/resultados.shp")
-</code></pre>
+# Capa de polígonos por categoría (solo para leyenda de localidades)
+gdf.plot(column="LocNombre", ax=ax, legend=True, edgecolor="#444", linewidth=.2, alpha=0.7)
 
+# Capa de puntos
+points_gdf.plot(ax=ax, markersize=5, color="#e53935", alpha=0.8)
+
+ax.set_title("Mapa de Áreas Geográficas con Puntos", loc="left")
+ax.set_axis_off()
+plt.show()</code></pre>
+
+    <!-- IMG 6: mapa de puntos sobre polígonos -->
     <div class="img-center">
-      <!-- ESPACIO PARA IMAGEN 10 (Exportar resultados) -->
-      <img src="../img/parte3_exportar_resultados.png" alt="Exportar resultados a formatos GIS">
+      <img src="../img/p4_06_mapa_puntos.png" alt="Mapa de áreas con puntos superpuestos">
     </div>
 
-    <h2>8) Automatización ligera (opcional)</h2>
-    <p>Si realizarás el mismo procesamiento con frecuencia, empaqueta tus pasos en una función:</p>
-    <pre><code class="language-python">from pathlib import Path
-import pandas as pd
-import geopandas as gpd
+    <h2>Paso 7 — Guardar resultados (volver a QGIS)</h2>
+    <p>Exporta las salidas con geometría para usarlas en QGIS (recomendado GeoPackage):</p>
+    <pre><code class="language-python"># GeoPackage (GPKG)
+gdf.to_file("salidas/localidades_atributos.gpkg", driver="GPKG")
+points_gdf.to_file("salidas/consultorios.gpkg", driver="GPKG")
 
-def pipeline_qgis_python(ruta_geopkg, capa, csv_indicadores, salida_gpkg):
-    gdf = gpd.read_file(ruta_geopkg, layer=capa).to_crs(3116)
-    indicadores = pd.read_csv(csv_indicadores)
-    gdfm = gdf.merge(indicadores, on="COD_UPZ", how="left")
-    gdfm.to_file(salida_gpkg, driver="GPKG")
-    return gdfm
-
-ruta = "data/upz.gpkg"
-out  = "salidas/upz_con_indicadores.gpkg"
-gdfm = pipeline_qgis_python(ruta_geopkg=ruta, capa="upz", 
-                            csv_indicadores="data/indicadores_salud.csv",
-                            salida_gpkg=out)
-gdfm.head()
-</code></pre>
+# GeoJSON (alternativo)
+gdf.to_file("salidas/localidades_atributos.geojson", driver="GeoJSON")
+points_gdf.to_file("salidas/consultorios.geojson", driver="GeoJSON")</code></pre>
 
     <h2>Conclusión</h2>
     <p>
-      Con este flujo integraste <strong>QGIS</strong> (edición y simbología) con <strong>Python</strong> (análisis y automatización).
-      Exportaste la tabla de atributos, realizaste EDA, uniste con fuentes externas, generaste visualizaciones y devolviste
-      resultados a formatos GIS. Esta sinergia te permite escalar tu trabajo: reproducibilidad, auditoría y análisis avanzados.
+      Integraste la tabla de atributos con las geometrías y una capa de puntos, obtuviste mapas y salidas listas para
+      volver a QGIS. Este flujo te permite reproducir los análisis, auditar transformaciones y ampliar el
+      alcance con librerías de Python (EDA, modelado, automatización).
     </p>
+
   </div>
 
   <footer>
@@ -298,4 +181,3 @@ gdfm.head()
   </footer>
 </body>
 </html>
-
